@@ -13,23 +13,22 @@
                         </div>
                     @endif
                     
-                    <form action="{{route('insert_proc')}}" method="POST">
+                    <form action="{{route('modify_proc')}}" method="POST">
                         <input type="hidden" name="email" value="{{$viewData[0]->email}}">
                         <input type="hidden" name="id" value="{{$viewData[0]->id}}">
                         @csrf
                         <div class="form-group">
-                            <input type="title" class="form-control" placeholder="제목 넣어라" id="title" name="title" value="{{$viewData[0]->title}}" disabled>
+                            <input type="text" class="form-control" placeholder="제목 넣어라" id="title" name="title" value="{{$viewData[0]->title}}">
                         </div>
                         <div class="form-group">                            
-                            <textarea class="form-control" rows="10" id="content" name="content" placeHolder="입벌려 내용 들어간다" disabled>{{$viewData[0]->content}}</textarea>
+                            <textarea class="form-control" rows="10" id="content" name="content" placeHolder="입벌려 내용 들어간다">{{$viewData[0]->content}}</textarea>
                         </div>
                         <div class="text-right">
                             <button type="button" class="btn btn-primary" onclick="javascript:location.href='{{ url('/boards') }}'">목록</button>
-                            <button type="button" class="btn btn-primary" onclick="board_modify('{{$viewData[0]->id}}')">수정</button>
+                            <button type="submit" class="btn btn-primary">수정</button>
                             <button type="button" class="btn btn-primary" onclick="board_delete('{{$viewData[0]->id}}')">삭제</button>
-                            <button type="submit" class="btn btn-primary">글쓰기</button>
                         </div>
-                    </form>
+                    </form>                    
             </div>
         </div>
     </div>
@@ -37,11 +36,6 @@
 @endsection
 
 <script>
-
-    function board_modify(id){        
-        location.href='/modifyBoards?id={{$viewData[0]->id}}';
-    }
-
     function board_delete(id){
         if(confirm("정말 글을 삭제하시겠냐?")){
             location.href='/deleteBoards?id={{$viewData[0]->id}}';

@@ -17,14 +17,16 @@ class BoardController extends Controller
     }
 
     public function boards(){ 
-        //$listData = Boards::all();
-        $listData = Boards::all()->sortByDesc("id");
-        return view('boards',compact('listData'));
+        //$listData = Boards::all();        
+        $listData = DB::table('boards')->select('*')->orderByRaw('id desc')->paginate(3);
+        //$countData = DB::table('boards')->count;
+        $idx = $listData->firstItem();
+        return view('boards',compact('listData'),['idx' => $idx]);
     }
+    
 
     /* 글 상세페이지 */
-    public function view(Request $request){
-        
+    public function view(Request $request){        
         $viewData = DB::select('select * from boards where id = :id', ['id' => $request->id]);
         return view('view', ['viewData' => $viewData]);
     }
@@ -32,23 +34,8 @@ class BoardController extends Controller
     public function insert(){         
         return view('insert');
     }
-
-    
-    
     public function insert_proc(Request $request)
-    {   
-        //dd($request->url());
-        //return $request->all();
-        
-        /*
-        $Boards = new Boards;
-        $Boards->email = $request->user()->id;
-        $Boards->title = $request ->title;
-        $Boards->content = $request -> content;
-        $Boards->reg_date = Carbon::now() ;
-        $Boards-> save();
-        */
-        
+    {        
         Boards::insert([
             'email' => $request->user()->email,
             'title' => $request->title,
@@ -59,27 +46,31 @@ class BoardController extends Controller
         return redirect('/boards');
     }
 
-    public function modify(Request $request)
+    public function modifyBoards(Request $request)
     {   
+        $viewData = DB::select('select * from boards where id = :id', ['id' => $request->id]);
+        return view('modify', ['viewData' => $viewData]);
+    }
+
+    public function modify_proc(Request $request){
+
         $this->validate($request, [
-            'name' => ['required', 'string', 'max:255'],            
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'title' => ['required'],
+            'content' => ['required'],
         ]);
         
-        User::where('id', $request->id)
+        Boards::where('id', $request->id)
         ->update(
-            ['name' => $request->name,
-            'password' => Hash::make($request->password),
+            ['title' => $request->title,
+            'content' => $request->content,
             ]
         );
 
-        return redirect() -> back();        
+        return redirect('/boards');
     }
 
-    public function deleteBoards(Request $request){                
-
+    public function deleteBoards(Request $request){
         DB::table('boards')->where('id', '=', $request->id)->delete();
         return redirect('/boards');
-
     }
 }

@@ -34,5 +34,7 @@ Route::get('/boards','BoardController@boards')->name('boards');
 Route::get('/insert','BoardController@insert')->name('insert');
 Route::get('/view','BoardController@view')->name('view');
 Route::get('/deleteBoards','BoardController@deleteBoards')->name('deleteBoards');
+Route::get('/modifyBoards','BoardController@modifyBoards')->name('modifyBoards');
 
 Route::post('insert_proc','BoardController@insert_proc')->name('insert_proc');
+Route::post('modify_proc','BoardController@modify_proc')->name('modify_proc');

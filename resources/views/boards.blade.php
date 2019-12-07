@@ -23,18 +23,22 @@
                         </thead>
                         <tbody>
                             @foreach($listData as $data)
-                            <tr onclick="javascript:location.href='/view?id={{$data->id}}'">
-                                <td>{{ $data->id }}</td>
+                            <tr onclick="javascript:location.href='/view?id={{$data->id}}'">                                
+                                <td>{{ $idx++ }}</td>
                                 <td>{{ $data->title }}</td>
                                 <td>{{ $data->email }}</td>
                                 <td>{{ $data->reg_date }}</td>
                             </tr>                            
                             @endforeach
                         </tbody>
-                    </table>
-                    <div class="text-right">
+                    </table>                    
+                    <div class="pagination justify-content-center">
+                        {{ $listData->render() }}
+                    </div>                    
+                    <div class="text-right ">
                         <button type="button" class="btn btn-primary" onclick="javascript:location.href='{{ route('insert') }}'">{{ __('글쓰기') }}</button>
                     </div>
+                    
                 </div>
             </div>
         </div>
